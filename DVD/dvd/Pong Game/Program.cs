@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Numerics;
 using Raylib_cs;
 
@@ -7,88 +6,96 @@ namespace Pong
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            //  Pelin ikkunan asetukset
             const int screenWidth = 800;
             const int screenHeight = 600;
-
-            // Initialize Raylib
             Raylib.InitWindow(screenWidth, screenHeight, "Pong Game");
+            Raylib.SetTargetFPS(60);
 
-            // Define player variables
+            //  Pelaajien asetukset
             const int paddleWidth = 20;
             const int paddleHeight = 100;
-            const int paddleSpeed = 5;
+            const int paddleSpeed = 6;
 
-            // Player 1 variables
-            Raylib_cs.Rectangle player1 = new Rectangle(50, screenHeight / 2 - paddleHeight / 2, paddleWidth, paddleHeight);
-            int player1Score = 0;
-            Vector2 player1ScorePosition = new Vector2(screenWidth / 4, 20);
-
-            // Player 2 variables
-            Rectangle player2 = new Rectangle(screenWidth - 50 - paddleWidth, screenHeight / 2 - paddleHeight / 2, paddleWidth, paddleHeight);
-            int player2Score = 0;
-            Vector2 player2ScorePosition = new Vector2(screenWidth * 3 / 4, 20);
-
-            // Ball variables
-            Vector2 ballPosition = new Vector2(screenWidth / 2, screenHeight / 2);
-            Vector2 ballSpeed = new Vector2(5, 5); // initial speed
+            //  Pallon asetukset
             const int ballRadius = 10;
+            Vector2 ballPosition = new Vector2(screenWidth / 2, screenHeight / 2);
+            Vector2 ballSpeed = new Vector2(5, 5);
+
+            // Pelaajat (x, y, leveys, korkeus)
+            Rectangle player1 = new Rectangle(30, screenHeight / 2 - paddleHeight / 2, paddleWidth, paddleHeight);
+            Rectangle player2 = new Rectangle(screenWidth - 50, screenHeight / 2 - paddleHeight / 2, paddleWidth, paddleHeight);
+
+            // Pistelasku
+            int player1Score = 0;
+            int player2Score = 0;
 
             while (!Raylib.WindowShouldClose())
             {
-                // Update
-                // Move players
+                // Pelaajien ohjaus (käytetään `Y` eikä `y`)
+                if (Raylib.IsKeyDown(KeyboardKey.W) && player1.Y > 0)
+                    player1.Y -= paddleSpeed;
+                if (Raylib.IsKeyDown(KeyboardKey.S) && player1.Y + player1.Height < screenHeight)
+                    player1.Y += paddleSpeed;
 
-                // Move ball
-                ballPosition.x += ballSpeed.x;
-                ballPosition.y += ballSpeed.y;
+                if (Raylib.IsKeyDown(KeyboardKey.Up) && player2.Y > 0)
+                    player2.Y -= paddleSpeed;
+                if (Raylib.IsKeyDown(KeyboardKey.Down) && player2.Y + player2.Height < screenHeight)
+                    player2.Y += paddleSpeed;
 
-                // Check collision with players
-                if (CheckCollisionCircleRec(ballPosition, ballRadius, player1) || CheckCollisionCircleRec(ballPosition, ballRadius, player2))
+                //  Pallon liike
+                ballPosition.X += ballSpeed.X;
+                ballPosition.Y += ballSpeed.Y;
+
+                //  Törmäykset pelaajiin
+                if (Raylib.CheckCollisionCircleRec(ballPosition, ballRadius, player1) ||
+                    Raylib.CheckCollisionCircleRec(ballPosition, ballRadius, player2))
                 {
-                    ballSpeed.x = -ballSpeed.x; // reverse X direction
+                    ballSpeed.X *= -1.1f; // Vaihda suunta ja nopeuta hieman
                 }
 
-                // Check collision with top and bottom walls
-                if ((ballPosition.y - ballRadius <= 0) || (ballPosition.y + ballRadius >= screenHeight))
+                //  Törmäykset ylä- ja alareunaan
+                if (ballPosition.Y - ballRadius <= 0 || ballPosition.Y + ballRadius >= screenHeight)
                 {
-                    ballSpeed.y = -ballSpeed.y; // reverse Y direction
+                    ballSpeed.Y *= -1;
                 }
 
-                // Check if ball passed the paddle (scoring)
-                if (ballPosition.x + ballRadius <= 0)
+                //  Pistelasku
+                if (ballPosition.X + ballRadius <= 0) // Pelaaja 2 saa pisteen
                 {
-                    // Player 2 scores
                     player2Score++;
-                    ballPosition = new Vector2(screenWidth / 2, screenHeight / 2); // reset ball position
-                    ballSpeed = new Vector2(5, 5); // reset ball speed
+                    ballPosition = new Vector2(screenWidth / 2, screenHeight / 2);
+                    ballSpeed = new Vector2(5, 5);
                 }
-                else if (ballPosition.x - ballRadius >= screenWidth)
+                else if (ballPosition.X - ballRadius >= screenWidth) // Pelaaja 1 saa pisteen
                 {
-                    // Player 1 scores
                     player1Score++;
-                    ballPosition = new Vector2(screenWidth / 2, screenHeight / 2); // reset ball position
-                    ballSpeed = new Vector2(-5, -5); // reset ball speed
+                    ballPosition = new Vector2(screenWidth / 2, screenHeight / 2);
+                    ballSpeed = new Vector2(-5, -5);
                 }
 
-                // Input handling
-                // TODO: Handle player input to move paddles
-
-                // Draw
+                //  Piirretään peli
                 Raylib.BeginDrawing();
-                Raylib.ClearBackground(Color.BLACK);
+                Raylib.ClearBackground(Color.DarkBlue);
 
-                // Draw players
-                Raylib.DrawRectangleRec(player1, Color.WHITE);
-                Raylib.DrawRectangleRec(player2, Color.WHITE);
+                // Pisteviiva keskelle kenttää
+                for (int i = 0; i < screenHeight; i += 20)
+                {
+                    Raylib.DrawRectangle(screenWidth / 2 - 2, i, 4, 10, Color.LightGray);
+                }
 
-                // Draw ball
-                Raylib.DrawCircleV(ballPosition, ballRadius, Color.WHITE);
+                // Pelaajat
+                Raylib.DrawRectangleRec(player1, Color.SkyBlue);
+                Raylib.DrawRectangleRec(player2, Color.Gold);
 
-                // Draw scores
-                Raylib.DrawText(player1Score.ToString(), (int)player1ScorePosition.x, (int)player1ScorePosition.y, 20, Color.WHITE);
-                Raylib.DrawText(player2Score.ToString(), (int)player2ScorePosition.x, (int)player2ScorePosition.y, 20, Color.WHITE);
+                // Pallo
+                Raylib.DrawCircleV(ballPosition, ballRadius, Color.White);
+
+                // Pisteet
+                Raylib.DrawText(player1Score.ToString(), screenWidth / 4, 20, 40, Color.SkyBlue);
+                Raylib.DrawText(player2Score.ToString(), screenWidth * 3 / 4, 20, 40, Color.Gold);
 
                 Raylib.EndDrawing();
             }
