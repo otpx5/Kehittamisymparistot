@@ -41,7 +41,6 @@ class Program
             if (position.X <= 0 || position.X + textSize.X >= screenWidth)
             {
                 direction.X *= -1; // Vaihda suunta vaaka-akselilla
-                position.X = Math.Clamp(position.X, 0, screenWidth - textSize.X); // Estä ulos hyppiminen
                 textColor = GetRandomColor(); // Vaihda väriä
                 speed += 10.0f; // Kasvata nopeutta
             }
