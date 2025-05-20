@@ -167,6 +167,10 @@ namespace Artillery
             float x = direction.X * cos - direction.Y * sin;
             float y = direction.X * sin + direction.Y * cos;
             direction = Vector2.Normalize(new Vector2(x, y));
+
+            // Debug print: artillery angle in degrees
+            float angleDegrees = (float)(Math.Atan2(direction.Y, direction.X) * (180.0 / Math.PI));
+            Console.WriteLine($"[DEBUG] Gun angle: {angleDegrees:F2} degrees");
         }
 
         private void Fire(Rectangle player, Vector2 direction)
