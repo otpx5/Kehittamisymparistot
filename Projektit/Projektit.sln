@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TankGame", "TankGame\TankGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Artillery", "Artillery\Artillery.csproj", "{2AB385D1-EC41-42AE-B45C-85C236BC7EBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ateroids", "Ateroids\Ateroids.csproj", "{0705786E-591B-428E-9E9A-0A182408AD44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +35,15 @@ Global
 		{2AB385D1-EC41-42AE-B45C-85C236BC7EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AB385D1-EC41-42AE-B45C-85C236BC7EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AB385D1-EC41-42AE-B45C-85C236BC7EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0705786E-591B-428E-9E9A-0A182408AD44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0705786E-591B-428E-9E9A-0A182408AD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0705786E-591B-428E-9E9A-0A182408AD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0705786E-591B-428E-9E9A-0A182408AD44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C611952-BF2D-4490-8AFC-BF244E21E875}
 	EndGlobalSection
 EndGlobal
