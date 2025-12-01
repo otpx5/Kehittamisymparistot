@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Raylib_cs;
+using ClassLibrary;
 
 namespace Ateroids
 {
@@ -16,12 +17,13 @@ namespace Ateroids
         float max_speed = 200.0f;
         float turningSpeed = 3.0f;
         float rotationAngle = 0.0f;
+        public float radius = 50;
 
-        public object White { get; private set; }
+        
 
         public Player(Vector2 startPosition, Texture2D texture)
         {
-            transform = new Transform();
+            transform = new Transform();    
            transform.position = startPosition;
            transform.velocity = new Vector2(0, 0);
             imageTexture = texture;
@@ -29,6 +31,7 @@ namespace Ateroids
         public void Draw()
         {
             SpriteCompoment.DrawRotated(imageTexture, transform.position, rotationAngle * Raylib.RAD2DEG);
+            Raylib.DrawCircleLines((int)transform.position.X, (int)transform.position.Y, radius, Color.Yellow);
         }
         public void Update()
         {

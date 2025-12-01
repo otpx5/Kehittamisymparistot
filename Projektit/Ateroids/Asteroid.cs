@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Raylib_cs;
 using System.Numerics;
+using ClassLibrary;
 
 namespace Ateroids
 {
@@ -16,9 +17,10 @@ namespace Ateroids
     }
     internal class Asteroid
     {
-        Transform transform;
+       public Transform transform;
         Texture2D texture;
-        AsteroidSize size;
+        public AsteroidSize size;
+        public float radius;
         public Asteroid(Vector2 startPosition, Vector2 startVelocity, Texture2D asteroidTexture, AsteroidSize size)
         {
             transform = new Transform();
@@ -26,11 +28,24 @@ namespace Ateroids
             transform.velocity = startVelocity;
             texture = asteroidTexture;
             this .size = size;
+            if (size == AsteroidSize.Large)
+            {
+                radius = 50;
+            }
+            else if (size == AsteroidSize.Medium)
+            {
+                radius = 30;
+            }
+            else
+            {
+                radius = 10;
+            }
         }
         public void Draw()
         {
             float rotationAngle = (float)Math.Atan2(transform.velocity.Y, transform.velocity.X) + (float)(Math.PI / 2);
             SpriteCompoment.DrawRotated(texture, transform.position, rotationAngle * Raylib.RAD2DEG);
+            Raylib.DrawCircleLines((int)transform.position.X, (int)transform.position.Y, radius, Color.Red);
             transform.move();
         }
     }
